@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Register</title>
+
+<style>
+.container{
+  background: linear-gradient(white, black);
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+form{
+  background: radial-gradient(black,rgb(255, 253, 253));
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 1px 1px 0 #ccc,
+        2px 2px 0 #bbb,
+        3px 3px 0 #aaa,
+        4px 4px 0 #999,
+        5px 5px 10px rgba(0, 0, 0, 0.6);
+}
+
+input{
+  display: block;
+  margin: 10px 0;
+  padding: 8px;
+  width: 200px;
+}
+
+button{
+  padding: 10px;
+  background: blue;
+  color: white;
+  border: none;
+  cursor: pointer;
+  
+    font-weight: bold;
+    color: #ffffff;
+    text-shadow:
+        1px 1px 0 #ccc,
+        2px 2px 0 #bbb,
+        3px 3px 0 #aaa,
+        4px 4px 0 #999,
+        5px 5px 10px rgba(0, 0, 0, 0.6);
+    box-shadow: 1px 1px 0 #ccc,
+        2px 2px 0 #bbb,
+        3px 3px 0 #aaa,
+        4px 4px 0 #999,
+        5px 5px 10px rgba(0, 0, 0, 0.6);
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<form action="http://localhost:5000/register" method="POST">
+
+  <label for="name">Enter Name:</label>
+  <input type="text" name="name" id="name" placeholder="Name" required>
+
+  <label for="email">Enter Email:</label>
+  <input type="email" name="email" id="email" placeholder="Email" required>
+
+  <label for="password">Enter Password:</label>
+  <input type="password" name="password" id="password" placeholder="Password" required>
+
+  <button type="submit">Register</button>
+
+</form>
+
+</div>
+
+</body>
+</html>

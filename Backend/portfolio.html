@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolio Generator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --accent: #6C63FF;
+      --accent-light: #EEF2FF;
+      --accent-mid: #c7d2fe;
+      --text: #111827;
+      --text-muted: #6b7280;
+      --bg: #ffffff;
+      --bg2: #f9fafb;
+      --border: #e5e7eb;
+      --green: #16a34a;
+      --green-bg: #dcfce7;
+      --red: #dc2626;
+      --red-bg: #fef2f2;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: var(--text);
+      background: var(--bg2);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    a { text-decoration: none; color: inherit; }
+
+    /* ════════════════════════════
+       FORM PAGE
+    ════════════════════════════ */
+    #form-page {
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 3rem 1.25rem 4rem;
+    }
+
+    .form-wrapper {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2.5rem 2.75rem;
+      width: 100%;
+      max-width: 660px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.05);
+    }
+
+    .form-brand {
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+      margin-bottom: 0.25rem;
+    }
+    .form-brand em { font-style: normal; color: var(--accent); }
+
+    .form-heading {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      margin-bottom: 0.4rem;
+    }
+
+    .form-sub {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 2.25rem;
+    }
+
+    /* section dividers inside form */
+    .form-section-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-muted);
+      margin-bottom: 0.85rem;
+      margin-top: 1.75rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .form-section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .form-section-label:first-of-type { margin-top: 0; }
+
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+    .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+    .field:last-of-type { margin-bottom: 0; }
+
+    label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    label .req { color: var(--accent); margin-left: 2px; }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="url"],
+    textarea,
+    select {
+      font-family: inherit;
+      font-size: 14px;
+      color: var(--text);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 14px;
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      width: 100%;
+    }
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(108,99,255,0.1);
+    }
+    textarea { resize: vertical; min-height: 80px; }
+    select { cursor: pointer; }
+
+    /* dynamic list rows */
+    .dyn-list { display: flex; flex-direction: column; gap: 8px; }
+    .dyn-row {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+    .dyn-row input, .dyn-row textarea, .dyn-row select { flex: 1; }
+    .dyn-card {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 14px;
+      background: var(--bg2);
+      flex: 1;
+      display: grid;
+      gap: 8px;
+    }
+    .dyn-card .card-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .dyn-card input, .dyn-card textarea, .dyn-card select {
+      background: var(--bg);
+      font-size: 13px;
+      padding: 8px 12px;
+    }
+
+    .btn-remove {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      width: 34px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text-muted);
+      flex-shrink: 0;
+      margin-top: 1px;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+    .btn-remove:hover { background: var(--red-bg); color: var(--red); border-color: #fca5a5; }
+
+    .btn-add {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--accent);
+      background: var(--accent-light);
+      border: none;
+      border-radius: 8px;
+      padding: 8px 14px;
+      cursor: pointer;
+      font-family: inherit;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 6px;
+      transition: opacity 0.15s;
+    }
+    .btn-add:hover { opacity: 0.8; }
+
+    .skill-chips { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 8px; }
+    .skill-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 5px 11px;
+      border-radius: 100px;
+      background: var(--accent-light);
+      color: var(--accent);
+    }
+    .skill-chip button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--accent);
+      font-size: 14px;
+      line-height: 1;
+      padding: 0;
+    }
+    .skill-input-row { display: flex; gap: 8px; }
+    .skill-input-row input { flex: 1; }
+    .btn-skill-add {
+      font-size: 13px;
+      font-weight: 600;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 0 16px;
+      cursor: pointer;
+      font-family: inherit;
+      white-space: nowrap;
+      transition: opacity 0.2s;
+    }
+    .btn-skill-add:hover { opacity: 0.85; }
+
+    .form-submit {
+      margin-top: 2.25rem;
+      display: flex;
+      gap: 10px;
+    }
+    .btn-generate {
+      flex: 1;
+      background: var(--accent);
+      color: #fff;
+      font-size: 15px;
+      font-weight: 700;
+      padding: 13px 24px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: opacity 0.2s;
+    }
+    .btn-generate:hover { opacity: 0.88; }
+    .btn-reset {
+      background: var(--bg2);
+      color: var(--text-muted);
+      font-size: 14px;
+      font-weight: 500;
+      padding: 13px 20px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.15s;
+    }
+    .btn-reset:hover { background: #f3f4f6; }
+
+    @media (max-width: 560px) {
+      .form-wrapper { padding: 1.75rem 1.25rem; }
+      .field-row { grid-template-columns: 1fr; }
+      .dyn-card .card-row { grid-template-columns: 1fr; }
+    }
+
+    /* ════════════════════════════
+       PORTFOLIO PAGE  (hidden until generated)
+    ════════════════════════════ */
+    #portfolio-page { display: none; background: var(--bg); }
+
+    /* NAV */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 2.5rem;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: var(--bg);
+      z-index: 100;
+    }
+    .logo { font-size: 17px; font-weight: 800; letter-spacing: -0.3px; }
+    .logo em { font-style: normal; color: var(--accent); }
+    .nav-links { display: flex; gap: 1.75rem; }
+    .nav-links a { font-size: 14px; color: var(--text-muted); font-weight: 500; transition: color 0.15s; }
+    .nav-links a:hover { color: var(--text); }
+    .btn-edit {
+      font-size: 13px;
+      font-weight: 600;
+      background: var(--bg2);
+      color: var(--text);
+      padding: 8px 18px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      font-family: inherit;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.15s;
+    }
+    .btn-edit:hover { background: #f3f4f6; }
+
+    /* HERO */
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 2.5rem;
+      align-items: center;
+      padding: 4rem 2.5rem 3.5rem;
+      border-bottom: 1px solid var(--border);
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .available-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--green);
+      background: var(--green-bg);
+      padding: 5px 13px;
+      border-radius: 100px;
+      margin-bottom: 1.25rem;
+    }
+    .badge-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); }
+    h1 { font-size: 48px; font-weight: 800; line-height: 1.08; letter-spacing: -2px; margin-bottom: 1rem; }
+    h1 span { color: var(--accent); }
+    .hero-bio { font-size: 15px; color: var(--text-muted); line-height: 1.75; max-width: 420px; margin-bottom: 2rem; }
+    .hero-actions { display: flex; gap: 12px; align-items: center; }
+    .btn-primary {
+      background: var(--accent); color: #fff; font-size: 14px; font-weight: 600;
+      padding: 11px 24px; border-radius: 10px; border: none; cursor: pointer;
+      font-family: inherit; transition: opacity 0.2s;
+    }
+    .btn-primary:hover { opacity: 0.88; }
+    .btn-secondary {
+      background: var(--bg2); color: var(--text); font-size: 14px; font-weight: 500;
+      padding: 11px 24px; border-radius: 10px; border: 1px solid var(--border);
+      cursor: pointer; font-family: inherit; transition: background 0.15s;
+    }
+    .btn-secondary:hover { background: #f3f4f6; }
+    .avatar {
+      width: 150px; height: 150px; border-radius: 50%; background: var(--accent-light);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 52px; font-weight: 800; color: var(--accent);
+      border: 3px solid var(--accent-mid); flex-shrink: 0;
+    }
+
+    /* SECTIONS */
+    .section {
+      padding: 2.5rem 2.5rem;
+      border-bottom: 1px solid var(--border);
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 1.75rem; }
+    .section-header h2 { font-size: 20px; font-weight: 700; letter-spacing: -0.3px; white-space: nowrap; }
+    .section-line { flex: 1; height: 1px; background: var(--border); }
+
+    /* SKILLS */
+    .skills { display: flex; flex-wrap: wrap; gap: 9px; }
+    .skill { font-size: 13px; font-weight: 600; padding: 6px 15px; border-radius: 100px; }
+    .sk-purple { background: #EEF2FF; color: #4338ca; }
+    .sk-blue   { background: #eff6ff; color: #1d4ed8; }
+    .sk-green  { background: #f0fdf4; color: #15803d; }
+    .sk-orange { background: #fff7ed; color: #c2410c; }
+    .sk-gray   { background: var(--bg2); color: var(--text-muted); }
+
+    /* PROJECTS */
+    .projects { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .project-card {
+      border: 1px solid var(--border); border-radius: 14px; padding: 1.2rem 1.3rem;
+      background: var(--bg); transition: border-color 0.2s, box-shadow 0.2s; cursor: pointer;
+    }
+    .project-card:hover { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(108,99,255,0.08); }
+    .project-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center; font-size: 20px; margin-bottom: 12px;
+    }
+    .pi-1 { background: #EEF2FF; color: #4338ca; }
+    .pi-2 { background: #fdf4ff; color: #7e22ce; }
+    .pi-3 { background: #fff7ed; color: #c2410c; }
+    .pi-4 { background: #f0fdf4; color: #15803d; }
+    .pi-5 { background: #eff6ff; color: #1d4ed8; }
+    .pi-6 { background: #fef9c3; color: #a16207; }
+    .project-title { font-size: 15px; font-weight: 700; margin-bottom: 5px; }
+    .project-desc  { font-size: 13px; color: var(--text-muted); line-height: 1.65; margin-bottom: 12px; }
+    .project-tags  { display: flex; gap: 6px; flex-wrap: wrap; }
+    .project-tag { font-size: 11px; font-weight: 500; background: var(--bg2); color: var(--text-muted); padding: 3px 9px; border-radius: 5px; }
+    .project-link {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 12px; font-weight: 600; color: var(--accent); margin-top: 10px;
+    }
+    .project-link i { font-size: 13px; }
+
+    /* EXPERIENCE */
+    .timeline { display: flex; flex-direction: column; }
+    .timeline-item { display: grid; grid-template-columns: 110px 20px 1fr; gap: 0 14px; padding-bottom: 1.5rem; }
+    .timeline-item:last-child { padding-bottom: 0; }
+    .t-date { font-size: 12px; color: var(--text-muted); font-weight: 500; text-align: right; padding-top: 3px; }
+    .t-line { display: flex; flex-direction: column; align-items: center; }
+    .t-circle { width: 12px; height: 12px; border-radius: 50%; background: var(--accent); flex-shrink: 0; margin-top: 4px; }
+    .t-vert { flex: 1; width: 2px; background: var(--border); margin-top: 5px; }
+    .timeline-item:last-child .t-vert { display: none; }
+    .t-role  { font-size: 15px; font-weight: 700; margin-bottom: 2px; }
+    .t-company { font-size: 13px; color: var(--text-muted); margin-bottom: 6px; }
+    .t-desc  { font-size: 13px; color: var(--text-muted); line-height: 1.65; }
+
+    /* CONTACT */
+    .contact { display: flex; gap: 10px; flex-wrap: wrap; }
+    .contact-chip {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 14px; font-weight: 500; padding: 11px 20px;
+      border-radius: 10px; border: 1px solid var(--border);
+      color: var(--text); cursor: pointer;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .contact-chip:hover { background: var(--accent-light); border-color: var(--accent); }
+    .contact-chip i { font-size: 18px; color: var(--accent); }
+
+    /* EDUCATION */
+    .edu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .edu-card { border: 1px solid var(--border); border-radius: 14px; padding: 1.1rem 1.25rem; background: var(--bg); display: flex; gap: 12px; align-items: flex-start; }
+    .edu-icon { width: 38px; height: 38px; border-radius: 10px; background: #eff6ff; color: #1d4ed8; display: flex; align-items: center; justify-content: center; font-size: 19px; flex-shrink: 0; }
+    .edu-degree { font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+    .edu-school { font-size: 13px; color: var(--text-muted); }
+    .edu-year { font-size: 11px; color: var(--accent); font-weight: 600; margin-top: 5px; display: inline-block; background: var(--accent-light); padding: 2px 8px; border-radius: 100px; }
+
+    /* CERTIFICATIONS */
+    .cert-list { display: flex; flex-direction: column; gap: 10px; }
+    .cert-item { display: flex; align-items: center; gap: 14px; padding: 12px 16px; border: 1px solid var(--border); border-radius: 12px; background: var(--bg); transition: border-color 0.2s; }
+    .cert-item:hover { border-color: var(--accent); }
+    .cert-badge { width: 36px; height: 36px; border-radius: 9px; background: #f0fdf4; color: #15803d; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+    .cert-name { font-size: 14px; font-weight: 700; }
+    .cert-issuer { font-size: 12px; color: var(--text-muted); }
+    .cert-year { margin-left: auto; font-size: 12px; font-weight: 600; color: var(--text-muted); white-space: nowrap; }
+    .cert-link { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; color: var(--accent); font-weight: 600; margin-top: 2px; }
+
+    /* DOWNLOAD BUTTON */
+    .btn-download { font-size: 13px; font-weight: 600; background: var(--accent); color: #fff; padding: 8px 18px; border-radius: 8px; border: none; cursor: pointer; font-family: inherit; display: inline-flex; align-items: center; gap: 6px; transition: opacity 0.2s; }
+    .btn-download:hover { opacity: 0.85; }
+
+    /* FOOTER */
+    footer {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.25rem 2.5rem; max-width: 900px; margin: 0 auto;
+    }
+    .footer-copy { font-size: 13px; color: var(--text-muted); }
+    .footer-copy span { color: var(--accent); font-weight: 600; }
+
+    /* RESPONSIVE */
+    @media (max-width: 640px) {
+      nav { padding: 1rem 1.25rem; }
+      .nav-links { display: none; }
+      .hero { grid-template-columns: 1fr; padding: 2.5rem 1.25rem; }
+      .avatar { width: 90px; height: 90px; font-size: 32px; }
+      h1 { font-size: 32px; }
+      .section { padding: 2rem 1.25rem; }
+      .projects { grid-template-columns: 1fr; }
+      .edu-grid { grid-template-columns: 1fr; }
+      footer { padding: 1rem 1.25rem; flex-direction: column; gap: 6px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════ FORM PAGE ══════════════ -->
+<div id="form-page">
+  <div class="form-wrapper">
+    <div class="form-brand">portfolio<em>.gen</em></div>
+    <h2 class="form-heading">Build your portfolio</h2>
+    <p class="form-sub">Fill in your details and your portfolio page will be generated instantly.</p>
+
+    <!-- BASIC INFO -->
+    <div class="form-section-label">Basic Info</div>
+
+    <div class="field-row">
+      <div class="field">
+        <label>Full Name <span class="req">*</span></label>
+        <input type="text" id="f-name" placeholder="Shaik Hussainbasha" />
+      </div>
+      <div class="field">
+        <label>Role / Title <span class="req">*</span></label>
+        <input type="text" id="f-role" placeholder="e.g. Frontend Developer" />
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Short Bio <span class="req">*</span></label>
+      <textarea id="f-bio" placeholder="A couple of lines about yourself and what you do…"></textarea>
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label>Email</label>
+        <input type="email" id="f-email" placeholder="you@email.com" />
+      </div>
+      <div class="field">
+        <label>GitHub URL</label>
+        <input type="url" id="f-github" placeholder="https://github.com/yourname" />
+      </div>
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label>LinkedIn URL</label>
+        <input type="url" id="f-linkedin" placeholder="https://linkedin.com/in/yourname" />
+      </div>
+      <div class="field">
+        <label>Twitter / X URL</label>
+        <input type="url" id="f-twitter" placeholder="https://twitter.com/yourname" />
+      </div>
+    </div>
+
+    <!-- SKILLS -->
+    <div class="form-section-label">Skills</div>
+
+    <div class="field">
+      <label>Add your skills</label>
+      <div class="skill-chips" id="skill-chips"></div>
+      <div class="skill-input-row">
+        <input type="text" id="skill-input" placeholder="e.g. React, Node.js, Javascript.." />
+        <button class="btn-skill-add" onclick="addSkill()">Add</button>
+      </div>
+    </div>
+
+    <!-- PROJECTS -->
+    <div class="form-section-label">Projects</div>
+    <div class="dyn-list" id="projects-list"></div>
+    <button class="btn-add" onclick="addProject()"><i class="ti ti-plus"></i> Add project</button>
+
+    <!-- EXPERIENCE -->
+    <div class="form-section-label">Experience</div>
+    <div class="dyn-list" id="experience-list"></div>
+    <button class="btn-add" onclick="addExperience()"><i class="ti ti-plus"></i> Add experience</button>
+
+    <!-- EDUCATION -->
+    <div class="form-section-label">Education</div>
+    <div class="dyn-list" id="education-list"></div>
+    <button class="btn-add" onclick="addEducation()"><i class="ti ti-plus"></i> Add education</button>
+
+    <!-- CERTIFICATIONS -->
+    <div class="form-section-label">Certifications</div>
+    <div class="dyn-list" id="certs-list"></div>
+    <button class="btn-add" onclick="addCert()"><i class="ti ti-plus"></i> Add certification</button>
+
+    <div class="form-submit">
+      <button class="btn-generate" onclick="generatePortfolio()">
+        <i class="ti ti-wand"></i> Generate Portfolio
+      </button>
+      <button class="btn-reset" onclick="resetForm()">Reset</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ PORTFOLIO PAGE ══════════════ -->
+<div id="portfolio-page">
+
+  <nav>
+    <div class="logo" id="p-logo">name<em>.dev</em></div>
+    <div class="nav-links">
+      <a href="#p-about">about</a>
+      <a href="#p-projects">projects</a>
+      <a href="#p-experience">experience</a>
+      <a href="#p-education">education</a>
+      <a href="#p-contact">contact</a>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <button class="btn-download" onclick="downloadPortfolio()"><i class="ti ti-download"></i> Download</button>
+      <button class="btn-edit" onclick="goBack()"><i class="ti ti-edit"></i> Edit</button>
+    </div>
+  </nav>
+
+  <section class="hero" id="p-about">
+    <div>
+      <div class="available-badge"><span class="badge-dot"></span>Available for work</div>
+      <h1 id="p-title">Hi, I'm Name<br><span id="p-role-span">Role</span></h1>
+      <p class="hero-bio" id="p-bio">Bio goes here.</p>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="document.getElementById('p-projects').scrollIntoView({behavior:'smooth'})">View my work</button>
+      </div>
+    </div>
+    <div class="avatar" id="p-avatar">N</div>
+  </section>
+
+  <section class="section" id="p-skills-section">
+    <div class="section-header"><h2>Skills</h2><div class="section-line"></div></div>
+    <div class="skills" id="p-skills"></div>
+  </section>
+
+  <section class="section" id="p-projects">
+    <div class="section-header"><h2>Projects</h2><div class="section-line"></div></div>
+    <div class="projects" id="p-projects-grid"></div>
+  </section>
+
+  <section class="section" id="p-experience">
+    <div class="section-header"><h2>Experience</h2><div class="section-line"></div></div>
+    <div class="timeline" id="p-timeline"></div>
+  </section>
+
+  <section class="section" id="p-education">
+    <div class="section-header"><h2>Education</h2><div class="section-line"></div></div>
+    <div class="edu-grid" id="p-edu-grid"></div>
+  </section>
+
+  <section class="section" id="p-certs">
+    <div class="section-header"><h2>Certifications</h2><div class="section-line"></div></div>
+    <div class="cert-list" id="p-cert-list"></div>
+  </section>
+
+  <section class="section" id="p-contact" style="border-bottom:none;">
+    <div class="section-header"><h2>Get in touch</h2><div class="section-line"></div></div>
+    <div class="contact" id="p-contact-chips"></div>
+  </section>
+
+  <footer>
+    <span class="footer-copy">Built with <span>♥</span> by <span id="p-footer-name">Name</span></span>
+    <span class="footer-copy" id="p-footer-stack">portfolio.gen</span>
+  </footer>
+</div>
+
+<script>
+  /* ── STATE ── */
+  const skills = [];
+
+  /* ── SKILL INPUT: add on Enter key ── */
+  document.getElementById('skill-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') { e.preventDefault(); addSkill(); }
+  });
+
+  function addSkill() {
+    const inp = document.getElementById('skill-input');
+    const val = inp.value.trim();
+    if (!val) return;
+    // support comma-separated
+    val.split(',').map(s => s.trim()).filter(Boolean).forEach(s => {
+      if (!skills.includes(s)) skills.push(s);
+    });
+    inp.value = '';
+    renderSkillChips();
+  }
+
+  function removeSkill(s) {
+    const idx = skills.indexOf(s);
+    if (idx > -1) skills.splice(idx, 1);
+    renderSkillChips();
+  }
+
+  function renderSkillChips() {
+    const c = document.getElementById('skill-chips');
+    c.innerHTML = skills.map(s => `
+      <span class="skill-chip">${s}
+        <button onclick="removeSkill('${s.replace(/'/g,"\\'")}')">×</button>
+      </span>`).join('');
+  }
+
+  /* ── PROJECTS ── */
+  let projCount = 0;
+  const projIcons = [
+    'ti-layout-dashboard','ti-shopping-cart','ti-messages',
+    'ti-checklist','ti-code','ti-device-laptop'
+  ];
+
+  function addProject() {
+    projCount++;
+    const id = `proj-${projCount}`;
+    const html = `
+      <div class="dyn-row" id="${id}">
+        <div class="dyn-card">
+          <div class="card-row">
+            <input type="text" placeholder="Project title" data-proj="title" />
+            <input type="url"  placeholder="Live / GitHub URL (optional)" data-proj="url" />
+          </div>
+          <textarea placeholder="Short description…" data-proj="desc" rows="2"></textarea>
+          <input type="text" placeholder="Tags (comma-separated): React, Node.js" data-proj="tags" />
+        </div>
+        <button class="btn-remove" onclick="removeRow('${id}')" title="Remove"><i class="ti ti-trash" style="font-size:15px;"></i></button>
+      </div>`;
+    document.getElementById('projects-list').insertAdjacentHTML('beforeend', html);
+  }
+
+  /* ── EDUCATION ── */
+  let eduCount = 0;
+
+  function addEducation() {
+    eduCount++;
+    const id = `edu-${eduCount}`;
+    const html = `
+      <div class="dyn-row" id="${id}">
+        <div class="dyn-card">
+          <div class="card-row">
+            <input type="text" placeholder="Degree / Qualification" data-edu="degree" />
+            <input type="text" placeholder="University / School" data-edu="school" />
+          </div>
+          <div class="card-row">
+            <input type="text" placeholder="Year or range (e.g. 2019 – 2023)" data-edu="year" />
+            <input type="text" placeholder="Field of study (optional)" data-edu="field" />
+          </div>
+        </div>
+        <button class="btn-remove" onclick="removeRow('${id}')" title="Remove"><i class="ti ti-trash" style="font-size:15px;"></i></button>
+      </div>`;
+    document.getElementById('education-list').insertAdjacentHTML('beforeend', html);
+  }
+
+  /* ── CERTIFICATIONS ── */
+  let certCount = 0;
+
+  function addCert() {
+    certCount++;
+    const id = `cert-${certCount}`;
+    const html = `
+      <div class="dyn-row" id="${id}">
+        <div class="dyn-card">
+          <div class="card-row">
+            <input type="text" placeholder="Certification name" data-cert="name" />
+            <input type="text" placeholder="Issuing organization" data-cert="issuer" />
+          </div>
+          <div class="card-row">
+            <input type="text" placeholder="Year issued (e.g. 2023)" data-cert="year" />
+            <input type="url" placeholder="Credential URL (optional)" data-cert="url" />
+          </div>
+        </div>
+        <button class="btn-remove" onclick="removeRow('${id}')" title="Remove"><i class="ti ti-trash" style="font-size:15px;"></i></button>
+      </div>`;
+    document.getElementById('certs-list').insertAdjacentHTML('beforeend', html);
+  }
+
+  /* ── EXPERIENCE ── */
+  let expCount = 0;
+
+  function addExperience() {
+    expCount++;
+    const id = `exp-${expCount}`;
+    const html = `
+      <div class="dyn-row" id="${id}">
+        <div class="dyn-card">
+          <div class="card-row">
+            <input type="text" placeholder="Job title / Role" data-exp="role" />
+            <input type="text" placeholder="Company · Type (e.g. Full-time)" data-exp="company" />
+          </div>
+          <div class="card-row">
+            <input type="text" placeholder="Date range (e.g. 2022 — 2024)" data-exp="date" />
+            <div></div>
+          </div>
+          <textarea placeholder="What did you do? Key achievements…" data-exp="desc" rows="2"></textarea>
+        </div>
+        <button class="btn-remove" onclick="removeRow('${id}')" title="Remove"><i class="ti ti-trash" style="font-size:15px;"></i></button>
+      </div>`;
+    document.getElementById('experience-list').insertAdjacentHTML('beforeend', html);
+  }
+
+  function removeRow(id) {
+    document.getElementById(id)?.remove();
+  }
+
+  /* ── SKILL COLOR CYCLE ── */
+  const skClasses = ['sk-purple','sk-blue','sk-green','sk-orange','sk-gray'];
+  function skClass(i) { return skClasses[i % skClasses.length]; }
+
+  const piClasses = ['pi-1','pi-2','pi-3','pi-4','pi-5','pi-6'];
+  function piClass(i) { return piClasses[i % piClasses.length]; }
+
+  /* ── GENERATE ── */
+  function generatePortfolio() {
+    const name   = document.getElementById('f-name').value.trim();
+    const role   = document.getElementById('f-role').value.trim();
+    const bio    = document.getElementById('f-bio').value.trim();
+    const email  = document.getElementById('f-email').value.trim();
+    const github = document.getElementById('f-github').value.trim();
+    const linkedin = document.getElementById('f-linkedin').value.trim();
+    const twitter  = document.getElementById('f-twitter').value.trim();
+
+    if (!name || !role) {
+      alert('Please enter at least your name and role.');
+      return;
+    }
+
+    // ── logo / title / bio
+    const slug = name.split(' ')[0].toLowerCase();
+    document.getElementById('p-logo').innerHTML = `${slug}<em>.dev</em>`;
+    document.getElementById('p-title').innerHTML = `Hi, I'm ${name}<br><span id="p-role-span">${role}</span>`;
+    document.getElementById('p-bio').textContent = bio || 'Welcome to my portfolio!';
+    const initials = name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+    document.getElementById('p-avatar').textContent = initials;
+    document.getElementById('p-footer-name').textContent = name;
+
+    // ── skills
+    const skillsEl = document.getElementById('p-skills');
+    if (skills.length) {
+      skillsEl.innerHTML = skills.map((s,i) =>
+        `<span class="skill ${skClass(i)}">${s}</span>`).join('');
+      document.getElementById('p-skills-section').style.display = '';
+    } else {
+      document.getElementById('p-skills-section').style.display = 'none';
+    }
+
+    // ── projects
+    const projRows = document.querySelectorAll('#projects-list .dyn-row');
+    const projGrid = document.getElementById('p-projects-grid');
+    projGrid.innerHTML = '';
+    projRows.forEach((row, i) => {
+      const title = row.querySelector('[data-proj="title"]')?.value.trim();
+      const desc  = row.querySelector('[data-proj="desc"]')?.value.trim();
+      const tags  = row.querySelector('[data-proj="tags"]')?.value.trim();
+      const url   = row.querySelector('[data-proj="url"]')?.value.trim();
+      if (!title) return;
+      const tagList = tags ? tags.split(',').map(t=>t.trim()).filter(Boolean) : [];
+      const iconClass = piClass(i);
+      const iconName  = projIcons[i % projIcons.length];
+      projGrid.innerHTML += `
+        <div class="project-card" ${url ? `onclick="window.open('${url}','_blank')"` : ''}>
+          <div class="project-icon ${iconClass}"><i class="ti ${iconName}"></i></div>
+          <div class="project-title">${title}</div>
+          ${desc ? `<p class="project-desc">${desc}</p>` : ''}
+          ${tagList.length ? `<div class="project-tags">${tagList.map(t=>`<span class="project-tag">${t}</span>`).join('')}</div>` : ''}
+          ${url ? `<a class="project-link" href="${url}" target="_blank"><i class="ti ti-external-link"></i>View project</a>` : ''}
+        </div>`;
+    });
+    document.getElementById('p-projects').style.display = projGrid.children.length ? '' : 'none';
+
+    // ── experience
+    const expRows = document.querySelectorAll('#experience-list .dyn-row');
+    const timeline = document.getElementById('p-timeline');
+    timeline.innerHTML = '';
+    expRows.forEach((row, i) => {
+      const expRole   = row.querySelector('[data-exp="role"]')?.value.trim();
+      const company   = row.querySelector('[data-exp="company"]')?.value.trim();
+      const date      = row.querySelector('[data-exp="date"]')?.value.trim();
+      const desc      = row.querySelector('[data-exp="desc"]')?.value.trim();
+      if (!expRole) return;
+      const isLast = i === expRows.length - 1;
+      timeline.innerHTML += `
+        <div class="timeline-item">
+          <span class="t-date">${date || ''}</span>
+          <div class="t-line">
+            <div class="t-circle"></div>
+            ${!isLast ? '<div class="t-vert"></div>' : ''}
+          </div>
+          <div>
+            <div class="t-role">${expRole}</div>
+            ${company ? `<div class="t-company">${company}</div>` : ''}
+            ${desc ? `<div class="t-desc">${desc}</div>` : ''}
+          </div>
+        </div>`;
+    });
+    document.getElementById('p-experience').style.display = timeline.children.length ? '' : 'none';
+
+    // ── education
+    const eduRows = document.querySelectorAll('#education-list .dyn-row');
+    const eduGrid = document.getElementById('p-edu-grid');
+    eduGrid.innerHTML = '';
+    eduRows.forEach(row => {
+      const degree = row.querySelector('[data-edu="degree"]')?.value.trim();
+      const school = row.querySelector('[data-edu="school"]')?.value.trim();
+      const year   = row.querySelector('[data-edu="year"]')?.value.trim();
+      const field  = row.querySelector('[data-edu="field"]')?.value.trim();
+      if (!degree) return;
+      eduGrid.innerHTML += `
+        <div class="edu-card">
+          <div class="edu-icon"><i class="ti ti-school"></i></div>
+          <div>
+            <div class="edu-degree">${degree}${field ? ' · ' + field : ''}</div>
+            ${school ? `<div class="edu-school">${school}</div>` : ''}
+            ${year ? `<span class="edu-year">${year}</span>` : ''}
+          </div>
+        </div>`;
+    });
+    document.getElementById('p-education').style.display = eduGrid.children.length ? '' : 'none';
+
+    // ── certifications
+    const certRows = document.querySelectorAll('#certs-list .dyn-row');
+    const certList = document.getElementById('p-cert-list');
+    certList.innerHTML = '';
+    certRows.forEach(row => {
+      const cname  = row.querySelector('[data-cert="name"]')?.value.trim();
+      const issuer = row.querySelector('[data-cert="issuer"]')?.value.trim();
+      const year   = row.querySelector('[data-cert="year"]')?.value.trim();
+      const url    = row.querySelector('[data-cert="url"]')?.value.trim();
+      if (!cname) return;
+      certList.innerHTML += `
+        <div class="cert-item" ${url ? `onclick="window.open('${url}','_blank')" style="cursor:pointer;"` : ''}>
+          <div class="cert-badge"><i class="ti ti-certificate"></i></div>
+          <div>
+            <div class="cert-name">${cname}</div>
+            ${issuer ? `<div class="cert-issuer">${issuer}</div>` : ''}
+            ${url ? `<a class="cert-link" href="${url}" target="_blank"><i class="ti ti-external-link" style="font-size:11px;"></i> View credential</a>` : ''}
+          </div>
+          ${year ? `<span class="cert-year">${year}</span>` : ''}
+        </div>`;
+    });
+    document.getElementById('p-certs').style.display = certList.children.length ? '' : 'none';
+
+    // ── contact
+    const chips = document.getElementById('p-contact-chips');
+    chips.innerHTML = '';
+    if (email)    chips.innerHTML += `<a class="contact-chip" href="mailto:${email}"><i class="ti ti-mail"></i>${email}</a>`;
+    if (github)   chips.innerHTML += `<a class="contact-chip" href="${github}" target="_blank"><i class="ti ti-brand-github"></i>GitHub</a>`;
+    if (linkedin) chips.innerHTML += `<a class="contact-chip" href="${linkedin}" target="_blank"><i class="ti ti-brand-linkedin"></i>LinkedIn</a>`;
+    if (twitter)  chips.innerHTML += `<a class="contact-chip" href="${twitter}" target="_blank"><i class="ti ti-brand-twitter"></i>Twitter</a>`;
+    document.getElementById('p-contact').style.display = chips.children.length ? '' : 'none';
+
+    // stack hint in footer
+    const topSkills = skills.slice(0,3).join(' · ') || role;
+    document.getElementById('p-footer-stack').textContent = topSkills;
+
+    // ── swap pages
+    document.getElementById('form-page').style.display = 'none';
+    document.getElementById('portfolio-page').style.display = 'block';
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }
+
+  function goBack() {
+    document.getElementById('portfolio-page').style.display = 'none';
+    document.getElementById('form-page').style.display = 'flex';
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }
+
+  function resetForm() {
+    if (!confirm('Reset all fields?')) return;
+    ['f-name','f-role','f-bio','f-email','f-github','f-linkedin','f-twitter'].forEach(id => {
+      document.getElementById(id).value = '';
+    });
+    skills.length = 0;
+    renderSkillChips();
+    document.getElementById('projects-list').innerHTML = '';
+    document.getElementById('experience-list').innerHTML = '';
+    document.getElementById('education-list').innerHTML = '';
+    document.getElementById('certs-list').innerHTML = '';
+    projCount = 0;
+    expCount = 0;
+    eduCount = 0;
+    certCount = 0;
+  }
+
+  function downloadPortfolio() {
+    const name = document.getElementById('p-footer-name').textContent || 'portfolio';
+    const fileName = name.toLowerCase().replace(/\s+/g, '-') + '-portfolio.html';
+    const portfolioEl = document.getElementById('portfolio-page');
+    const styleEl = document.querySelector('style');
+    const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>${name} — Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+  ${styleEl ? styleEl.outerHTML : ''}
+  <style>
+    #portfolio-page { display: block !important; }
+    .btn-edit, .btn-download { display: none !important; }
+    nav { position: relative; }
+  </style>
+</head>
+<body style="background:#fff;">
+${portfolioEl.outerHTML}
+</body>
+</html>`;
+    const blob = new Blob([html], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  /* seed one empty project + experience row on load */
+  addProject();
+  addExperience();
+  addEducation();
+  addCert();
+</script>
+</body>
+</html>
